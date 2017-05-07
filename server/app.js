@@ -3,9 +3,21 @@ const app = express();
 const routes = require('./routes');
 const morgan = require('morgan');
 const db = require('../models');
+const bodyParser = require('body-parser');
+const nunjucks = require('nunjucks');
 
-// log requests and set up routes
+// set up render engine
+nunjucks.configure('views', {noCache: true});
+app.set('view engine', 'html');
+app.engine('html', nunjucks.render);
+
+// set static folders
+app.use(express.static(path.join(__dirname, '../public')));
+
+// log requests, set up body parser, and set up routes
 app.use(morgan('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 app.use('/', routes);
 
 
