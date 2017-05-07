@@ -30,5 +30,5 @@ db.sync({force: true}).then(() => app.listen(9001, () => console.log('Listening 
 app.use('/', (err, req, res, next) => {
   console.error(err.message);
   console.error(err.stack);
-  res.status(err.status).send(err.message);
+  res.render('error', {message: err.message, error: err});
 });
