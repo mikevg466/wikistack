@@ -1,10 +1,23 @@
 const db = require('./db.js');
+const Sequelize = require('sequelize');
 
 const Page = db.define('page', {
-  title: {},
-  urlTitle: {},
-  content: {},
-  status: {}
+  title: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  urlTitle: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  content: {
+    type: Sequelize.TEXT,
+    allowNull: false
+  },
+  status: {
+    type: Sequelize.ENUM('open', 'close'),
+    allowNull: false
+  }
 });
 
 module.exports = Page;
