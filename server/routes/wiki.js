@@ -5,7 +5,10 @@ module.exports = routes;
 routes.get('/add', (req, res) => res.render('addpage'));
 routes.post('/', (req, res) => {
   const title = req.body.title;
-  Page.create({title: title})
+  Page.create({
+    title: req.body.title,
+    content: req.body.content
+  })
   .then(() => res.redirect('/'))
   .catch((err) => {
     console.error(err);
