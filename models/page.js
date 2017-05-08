@@ -15,8 +15,13 @@ const Page = db.define('page', {
     allowNull: false
   },
   status: {
-    type: Sequelize.ENUM('open', 'close'),
-    allowNull: false
+    type: Sequelize.ENUM('open', 'close')
+  }
+},{
+  getterMethods: {
+    getUrlTitle: function() {
+      return 'wiki/' + this.title.replace(/\s+/g, '_').replace(/\W/g, '')
+    }
   }
 });
 
