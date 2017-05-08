@@ -25,7 +25,7 @@ const Page = db.define('page', {
   },
   getterMethods: {
     getUrlTitle: function() {
-      return 'wiki/' + this.title.replace(/\s+/g, '_').replace(/\W/g, '')
+      return this.title.replace(/\s+/g, '_').replace(/\W/g, '')
     }
   }
 });
