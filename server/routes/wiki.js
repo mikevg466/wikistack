@@ -1,5 +1,7 @@
 const routes = require('express').Router();
+const Promise = require('bluebird');
 const Page = require('../../models/page.js');
+const User = require('../../models/user.js');
 module.exports = routes;
 
 routes.get('/add', (req, res) => res.render('addpage'));
@@ -8,20 +10,27 @@ routes.get('/:url', (req, res, next) => {
     where: {urlTitle: req.params.url}
   })
     .then((page) => {
-      console.log(page);
-      console.log(page.title);
-      console.log(page.content);
       res.render('wikipage', {page: page})
     })
     .catch(next);
 });
 routes.post('/', (req, res, next) => {
-  const title = req.body.title;
-  Page.create({
+  const userPromise = User.findOrCreate({
+    where:{
+      name: req.body.name,
+      email: req.body.email
+    }
+  });
+  const pagePromise = Page.create({
     title: req.body.title,
     content: req.body.content
-  })
-  .then(() => res.redirect('/wiki'))
-  .catch(next);
+  });
+  Promise.all([userPromise, pagePromise])
+    .then(([user, page]) => {
+      page.setAuthor(user[0]);
+      res.redirect('/wiki/' + page.urlTitle);
+    })
+    .catch(next);
+
 });
 routes.get('/', (req, res) => res.render('index'));
